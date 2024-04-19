@@ -1,1 +1,9 @@
-<p>chamados works!</p>
+<div *ngFor="let chamado of chamados">
+    <h1>{{chamado.description}}</h1>
+    <p>{{chamado.status}}</p>
+    <p>{{chamado.atendente.nome}}</p>
+    <p>{{chamado.usuario.nome}}</p>
+    <p>{{chamado.createdAt}}</p>
+    <p>{{chamado.campus}}</p>
+    <p>{{chamado.setor}}</p>
+</div>

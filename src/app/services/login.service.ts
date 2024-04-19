@@ -11,7 +11,7 @@ export class LoginService {
   url: string = `http://localhost:8080/auth/login`
   token: String | null = sessionStorage.getItem('auth-token')
   role: String | null = null
-  userLogin: String | null = ''
+  userId: String | null = ''
 
   constructor(private httpClient: HttpClient){ }
 
@@ -25,15 +25,22 @@ export class LoginService {
     )
   }
 
-  getUserId(){
-    var login = this.parseJwt(this.token).sub;
-    const userUrl = `http://localhost:8080/user/${login}`
+  async getUserIdd(token: String){
+    var login = this.parseJwt(token).sub;
+    const userUrl = `http://localhost:8080/user/userid/${login}`
     const headers = {
-      "Authorization": `${this.token}`
+      "Authorization": `${token}`
     }
-    return this.httpClient.get(userUrl, {headers})
+    const data = await fetch(userUrl, {headers});
+    const {id} = await data.json() ?? {};
+    this.userId = id
+    console.log(userUrl)
+    return id
   }
 
+  getUserId(token: any){
+    return this.parseJwt(token).sub
+  }
 
   parseJwt (token: any) {
     var base64Url = token.split('.')[1];

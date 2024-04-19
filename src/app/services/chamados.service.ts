@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
 import { LoginService } from './login.service';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChamadosService {
+  token = sessionStorage.getItem('auth-token')
+  userId = this.loginService.getUserId(this.token)
   constructor(private loginService: LoginService, private httpClient: HttpClient){ }
-
-  getChamados(userId: String){
-    const url = 'http://localhost:8080/chamado/'
+  
+  getChamadosByUser(){
+    const url = 'http://localhost:8080/chamado'
     const headers = {
-      "Authorization": `${this.loginService.token}`
+      "Authorization": `${this.token}`
     }
-    return this.httpClient.get(`${url}${userId}`, {headers})
+    if(this.token){
+      return this.httpClient.get(`${url}/${this.userId}`, {headers: headers})
+    }
+    return
   }
 }
